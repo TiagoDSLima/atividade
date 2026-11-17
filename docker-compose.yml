@@ -1,0 +1,46 @@
+services:
+  db:
+    image: postgres:17-alpine
+    container_name: tarefas-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_NAME:-tarefas}
+      POSTGRES_USER: ${DB_USERNAME:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - tarefas-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build: .
+    image: atividade1-moderno:latest
+    container_name: tarefas-app
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DB_URL: jdbc:postgresql://db:5432/${DB_NAME:-tarefas}
+      DB_USERNAME: ${DB_USERNAME:-postgres}
+      DB_PASSWORD: ${DB_PASSWORD:-postgres}
+      HIBERNATE_DDL_AUTO: ${HIBERNATE_DDL_AUTO:-update}
+      HIBERNATE_SHOW_SQL: ${HIBERNATE_SHOW_SQL:-false}
+    ports:
+      - "${APP_PORT:-8080}:8080"
+    networks:
+      - tarefas-network
+
+volumes:
+  postgres-data:
+
+networks:
+  tarefas-network:
+    driver: bridge
