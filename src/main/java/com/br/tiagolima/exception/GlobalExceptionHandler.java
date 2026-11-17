@@ -1,9 +1,11 @@
 package com.br.tiagolima.exception;
 
 import com.br.tiagolima.dto.ErroResponse;
+import com.br.tiagolima.exception.exceptions.ConflitoException;
 import com.br.tiagolima.exception.exceptions.RecursoNaoEncontradoException;
 import com.br.tiagolima.exception.exceptions.RequisicaoInvalidaException;
 import jakarta.servlet.http.HttpServletRequest;
+import org.hibernate.exception.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -45,6 +47,27 @@ public class GlobalExceptionHandler {
                 .body(new ErroResponse(
                         HttpStatus.BAD_REQUEST.value(),
                         ex.getMessage()
+                ));
+    }
+
+    @ExceptionHandler(ConflitoException.class)
+    public ResponseEntity<ErroResponse> handleConflitoException(ConflitoException ex) {
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(new ErroResponse(
+                        HttpStatus.CONFLICT.value(),
+                        ex.getMessage()
+                ));
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<ErroResponse> handleConstraintViolationException(ConstraintViolationException ex) {
+        log.warn("Restrição do banco de dados violada: {}", ex.getConstraintName());
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(new ErroResponse(
+                        HttpStatus.CONFLICT.value(),
+                        "A operação viola uma restrição do banco de dados"
                 ));
     }
 

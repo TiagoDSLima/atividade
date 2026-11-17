@@ -1,10 +1,13 @@
 package com.br.tiagolima.dto;
 
 import com.br.tiagolima.model.Prioridade;
+import com.br.tiagolima.model.Projeto;
 import com.br.tiagolima.model.StatusTarefa;
 import com.br.tiagolima.model.Tarefa;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
+import java.util.List;
 
 public record TarefaResponse(
         Long id,
@@ -13,10 +16,16 @@ public record TarefaResponse(
         StatusTarefa status,
         Prioridade prioridade,
         LocalDateTime criadaEm,
-        LocalDateTime atualizadaEm
+        LocalDateTime atualizadaEm,
+        ProjetoResumo projeto,
+        List<EtiquetaResponse> etiquetas
 ) {
 
+    public record ProjetoResumo(Long id, String nome) {
+    }
+
     public static TarefaResponse from(Tarefa tarefa) {
+        Projeto projeto = tarefa.getProjeto();
         return new TarefaResponse(
                 tarefa.getId(),
                 tarefa.getTitulo(),
@@ -24,7 +33,12 @@ public record TarefaResponse(
                 tarefa.getStatus(),
                 tarefa.getPrioridade(),
                 tarefa.getCriadaEm(),
-                tarefa.getAtualizadaEm()
+                tarefa.getAtualizadaEm(),
+                projeto == null ? null : new ProjetoResumo(projeto.getId(), projeto.getNome()),
+                tarefa.getEtiquetas().stream()
+                        .map(EtiquetaResponse::from)
+                        .sorted(Comparator.comparing(EtiquetaResponse::id))
+                        .toList()
         );
     }
 }

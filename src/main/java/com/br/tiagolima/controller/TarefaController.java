@@ -36,8 +36,9 @@ public class TarefaController {
 
     @GetMapping
     public List<TarefaResponse> listar(@RequestParam(required = false) StatusTarefa status,
-                                       @RequestParam(required = false) Prioridade prioridade) {
-        return service.listar(status, prioridade);
+                                       @RequestParam(required = false) Prioridade prioridade,
+                                       @RequestParam(required = false) Long projetoId) {
+        return service.listar(status, prioridade, projetoId);
     }
 
     @GetMapping("/{id}")

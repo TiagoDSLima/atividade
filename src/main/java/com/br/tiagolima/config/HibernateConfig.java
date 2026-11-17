@@ -1,5 +1,7 @@
 package com.br.tiagolima.config;
 
+import com.br.tiagolima.model.Etiqueta;
+import com.br.tiagolima.model.Projeto;
 import com.br.tiagolima.model.Tarefa;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
@@ -28,6 +30,8 @@ public class HibernateConfig {
         try {
             return new MetadataSources(registry)
                     .addAnnotatedClass(Tarefa.class)
+                    .addAnnotatedClass(Projeto.class)
+                    .addAnnotatedClass(Etiqueta.class)
                     .buildMetadata()
                     .buildSessionFactory();
         } catch (RuntimeException e) {
