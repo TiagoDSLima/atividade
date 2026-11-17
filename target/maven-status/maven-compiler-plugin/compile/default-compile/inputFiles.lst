@@ -1,0 +1,12 @@
+/home/tiagolima/IdeaProjects/atividade1-moderno/src/main/java/com/br/tiagolima/Atividade1ModernoApplication.java
+/home/tiagolima/IdeaProjects/atividade1-moderno/src/main/java/com/br/tiagolima/controller/TarefaController.java
+/home/tiagolima/IdeaProjects/atividade1-moderno/src/main/java/com/br/tiagolima/dto/ErroResponse.java
+/home/tiagolima/IdeaProjects/atividade1-moderno/src/main/java/com/br/tiagolima/dto/TarefaRequest.java
+/home/tiagolima/IdeaProjects/atividade1-moderno/src/main/java/com/br/tiagolima/exception/GlobalExceptionHandler.java
+/home/tiagolima/IdeaProjects/atividade1-moderno/src/main/java/com/br/tiagolima/exception/exceptions/RecursoNaoEncontradoException.java
+/home/tiagolima/IdeaProjects/atividade1-moderno/src/main/java/com/br/tiagolima/exception/exceptions/RequisicaoInvalidaException.java
+/home/tiagolima/IdeaProjects/atividade1-moderno/src/main/java/com/br/tiagolima/model/Prioridade.java
+/home/tiagolima/IdeaProjects/atividade1-moderno/src/main/java/com/br/tiagolima/model/StatusTarefa.java
+/home/tiagolima/IdeaProjects/atividade1-moderno/src/main/java/com/br/tiagolima/model/Tarefa.java
+/home/tiagolima/IdeaProjects/atividade1-moderno/src/main/java/com/br/tiagolima/repository/TarefaRepository.java
+/home/tiagolima/IdeaProjects/atividade1-moderno/src/main/java/com/br/tiagolima/service/TarefaService.java
