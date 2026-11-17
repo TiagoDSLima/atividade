@@ -1,46 +1,76 @@
 package com.br.tiagolima.repository;
 
+import com.br.tiagolima.model.Prioridade;
+import com.br.tiagolima.model.StatusTarefa;
 import com.br.tiagolima.model.Tarefa;
+import org.hibernate.SessionFactory;
+import org.hibernate.query.SelectionQuery;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentSkipListMap;
-import java.util.concurrent.atomic.AtomicLong;
-import java.util.function.UnaryOperator;
+import java.util.function.Consumer;
 
 @Repository
 public class TarefaRepository {
 
-    private final Map<Long, Tarefa> tarefas = new ConcurrentSkipListMap<>();
-    private final AtomicLong sequencia = new AtomicLong();
+    private final SessionFactory sessionFactory;
 
-    public List<Tarefa> listar() {
-        return List.copyOf(tarefas.values());
+    public TarefaRepository(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
+
+    public List<Tarefa> listar(StatusTarefa status, Prioridade prioridade) {
+        StringBuilder hql = new StringBuilder("from Tarefa t where 1 = 1");
+        if (status != null) {
+            hql.append(" and t.status = :status");
+        }
+        if (prioridade != null) {
+            hql.append(" and t.prioridade = :prioridade");
+        }
+        hql.append(" order by t.id");
+
+        return sessionFactory.fromSession(session -> {
+            SelectionQuery<Tarefa> query = session.createSelectionQuery(hql.toString(), Tarefa.class);
+            if (status != null) {
+                query.setParameter("status", status);
+            }
+            if (prioridade != null) {
+                query.setParameter("prioridade", prioridade);
+            }
+            return query.getResultList();
+        });
     }
 
     public Optional<Tarefa> buscar(long id) {
-        return Optional.ofNullable(tarefas.get(id));
+        return sessionFactory.fromSession(session -> Optional.ofNullable(session.find(Tarefa.class, id)));
     }
 
     public Tarefa inserir(Tarefa tarefa) {
-        Tarefa nova = new Tarefa(
-                sequencia.incrementAndGet(),
-                tarefa.titulo(),
-                tarefa.descricao(),
-                tarefa.status(),
-                tarefa.prioridade()
-        );
-        tarefas.put(nova.id(), nova);
-        return nova;
+        sessionFactory.inTransaction(session -> session.persist(tarefa));
+        return tarefa;
     }
 
-    public Optional<Tarefa> atualizar(long id, UnaryOperator<Tarefa> alteracao) {
-        return Optional.ofNullable(tarefas.computeIfPresent(id, (chave, atual) -> alteracao.apply(atual)));
+    public Optional<Tarefa> atualizar(long id, Consumer<Tarefa> alteracao) {
+        return sessionFactory.fromTransaction(session -> {
+            Tarefa tarefa = session.find(Tarefa.class, id);
+            if (tarefa == null) {
+                return Optional.empty();
+            }
+            alteracao.accept(tarefa);
+            session.flush();
+            return Optional.of(tarefa);
+        });
     }
 
     public boolean remover(long id) {
-        return tarefas.remove(id) != null;
+        return sessionFactory.fromTransaction(session -> {
+            Tarefa tarefa = session.find(Tarefa.class, id);
+            if (tarefa == null) {
+                return false;
+            }
+            session.remove(tarefa);
+            return true;
+        });
     }
 }
