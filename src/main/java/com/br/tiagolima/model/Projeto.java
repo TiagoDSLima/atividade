@@ -28,7 +28,6 @@ public class Projeto {
     @Column(length = TAMANHO_DESCRICAO)
     private String descricao;
 
-    /** 1 projeto possui N tarefas (lado inverso; a chave estrangeira fica em tarefas.projeto_id). */
     @OneToMany(mappedBy = "projeto")
     private List<Tarefa> tarefas = new ArrayList<>();
 

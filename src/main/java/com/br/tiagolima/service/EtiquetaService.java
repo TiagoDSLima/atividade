@@ -38,7 +38,6 @@ public class EtiquetaService {
         return EtiquetaResponse.from(repository.inserir(etiqueta));
     }
 
-    /** PUT: a etiqueta só possui o campo nome, que é substituído. */
     public EtiquetaResponse substituir(long id, EtiquetaRequest request) {
         if (repository.buscar(id).isEmpty()) {
             throw naoEncontrada(id);

@@ -15,7 +15,6 @@ import java.util.function.Consumer;
 @Repository
 public class TarefaRepository {
 
-    /** Carrega projeto e etiquetas na mesma consulta, evitando o problema N+1. */
     private static final String SELECT_COM_RELACIONAMENTOS =
             "select distinct t from Tarefa t left join fetch t.projeto left join fetch t.etiquetas";
 

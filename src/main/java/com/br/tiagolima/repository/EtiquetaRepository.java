@@ -40,7 +40,6 @@ public class EtiquetaRepository {
         return sessionFactory.fromSession(session -> Optional.ofNullable(session.find(Etiqueta.class, id)));
     }
 
-    /** Verifica se já existe etiqueta com o nome (sem diferenciar maiúsculas), ignorando o id informado. */
     public boolean existeComNome(String nome, Long ignorarId) {
         String hql = "select count(e) from Etiqueta e where lower(e.nome) = lower(:nome)"
                 + (ignorarId != null ? " and e.id <> :id" : "");
@@ -70,7 +69,6 @@ public class EtiquetaRepository {
         });
     }
 
-    /** Remove a etiqueta e desvincula das tarefas (linhas da tabela tarefa_etiquetas). */
     public boolean remover(long id) {
         return sessionFactory.fromTransaction(session -> {
             Etiqueta etiqueta = session.find(Etiqueta.class, id);

@@ -42,7 +42,6 @@ public class ProjetoService {
         return ProjetoResponse.from(repository.inserir(projeto));
     }
 
-    /** PUT: substitui todos os campos do projeto. */
     public ProjetoResponse substituir(long id, ProjetoRequest request) {
         encontrar(id);
         String nome = validarNome(request.nome(), id);
@@ -53,7 +52,6 @@ public class ProjetoService {
         }).map(ProjetoResponse::from).orElseThrow(() -> naoEncontrado(id));
     }
 
-    /** PATCH: altera apenas os campos informados. */
     public ProjetoResponse atualizar(long id, ProjetoRequest request) {
         encontrar(id);
         String nome = request.nome() != null ? validarNome(request.nome(), id) : null;
@@ -79,7 +77,6 @@ public class ProjetoService {
         }
     }
 
-    /** Garante que o projeto existe (usado também pela listagem de tarefas do projeto). */
     public Projeto encontrar(long id) {
         return repository.buscar(id).orElseThrow(() -> naoEncontrado(id));
     }

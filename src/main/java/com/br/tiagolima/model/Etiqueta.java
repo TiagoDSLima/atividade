@@ -24,7 +24,6 @@ public class Etiqueta {
     @Column(nullable = false, unique = true, length = TAMANHO_NOME)
     private String nome;
 
-    /** Lado inverso do relacionamento N:N com Tarefa. */
     @ManyToMany(mappedBy = "etiquetas")
     private Set<Tarefa> tarefas = new HashSet<>();
 

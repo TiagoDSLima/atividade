@@ -52,12 +52,10 @@ public class Tarefa {
     @Column(name = "atualizada_em", nullable = false)
     private LocalDateTime atualizadaEm;
 
-    /** N tarefas pertencem a 1 projeto (opcional). */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "projeto_id")
     private Projeto projeto;
 
-    /** N tarefas possuem N etiquetas, ligadas pela tabela tarefa_etiquetas. */
     @ManyToMany
     @JoinTable(
             name = "tarefa_etiquetas",

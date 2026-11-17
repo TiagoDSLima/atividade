@@ -28,7 +28,6 @@ public class ProjetoRepository {
         return sessionFactory.fromSession(session -> Optional.ofNullable(session.find(Projeto.class, id)));
     }
 
-    /** Verifica se já existe projeto com o nome (sem diferenciar maiúsculas), ignorando o id informado. */
     public boolean existeComNome(String nome, Long ignorarId) {
         String hql = "select count(p) from Projeto p where lower(p.nome) = lower(:nome)"
                 + (ignorarId != null ? " and p.id <> :id" : "");

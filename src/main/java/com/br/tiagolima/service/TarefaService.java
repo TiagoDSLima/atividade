@@ -56,7 +56,6 @@ public class TarefaService {
         return TarefaResponse.from(repository.inserir(tarefa));
     }
 
-    /** PUT: substitui todos os campos. Sem projetoId a tarefa fica sem projeto; sem etiquetaIds, sem etiquetas. */
     public TarefaResponse substituir(long id, TarefaRequest request) {
         validarCompleto(request);
         Projeto projeto = resolverProjeto(request.projetoId());
@@ -67,7 +66,6 @@ public class TarefaService {
                 .orElseThrow(() -> naoEncontrada(id));
     }
 
-    /** PATCH: altera apenas os campos informados. */
     public TarefaResponse atualizar(long id, TarefaRequest request) {
         if (request.titulo() != null) {
             validarTitulo(request.titulo());

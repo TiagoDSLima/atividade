@@ -1,7 +1,6 @@
 target/
 !.mvn/wrapper/maven-wrapper.jar
 
-# IDE
 .idea/
 *.iml
 .vscode/
@@ -9,5 +8,4 @@ target/
 .project
 .classpath
 
-# Ambiente
 .env
